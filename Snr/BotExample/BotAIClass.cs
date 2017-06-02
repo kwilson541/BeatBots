@@ -56,7 +56,7 @@ namespace BotExample
             _pointstoWin = pointstoWin;
             _maxRounds = maxRounds;
             _dynamite = dynamite;
-            
+
             resetGameVariables();
         }
 
@@ -69,7 +69,6 @@ namespace BotExample
             _lastOpponentsMove = null;
             _dynamiteRemaining = _dynamite;
             _opponentDynamiteRemaining = _dynamite;
-
         }
 
         /* Method called when move instruction is received instructing opponents move
@@ -93,17 +92,28 @@ namespace BotExample
          */
         internal static string GetMove()
         {
-            GetLastRoundResult();
-            return "ROCK";
+            if (_newGame != true) {                
+                GetLastRoundResult();
+            }
 
             if (_myMove == "DYNAMITE") {
                 _dynamiteRemaining--;
             }
+
+            return _myMove;
         }
 
         internal static void GetLastRoundResult()
         {
-
+            if (_winScenarios[_myLastMove].Contains(_lastOpponentsMove)) {
+                _lastRoundResult = "WIN";
+            }
+            else if (_myLastMove == _lastOpponentsMove) {
+                _lastRoundResult == "TIE";
+            }
+            else {
+                _lastRoundResult = "LOSE"
+            }
         }
     }
         
