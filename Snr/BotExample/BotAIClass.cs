@@ -17,11 +17,32 @@ namespace BotExample
 {
     internal static class BotAIClass
     {
+        // opponent info
         private static string _opponentName;
         private static string _lastOpponentsMove;
+        private static int _opponentDynamiteRemaining;
+        
+        // game info
         private static int _pointstoWin;
         private static int _maxRounds;
         private static int _dynamite;
+        private static bool _newGame;
+        private static string _lastRoundResult;
+        
+        // weapon info
+        private static string[] _weapons = {"ROCK", "PAPER", "SCISSORS", "DYNAMITE", "WATERBOMB"};
+        private static IDictionary<string, string[]> _winScenarios = new Dictionary<string, string[]>() {
+            {"ROCK", new string[] {"SCISSORS", "WATERBOMB"}},
+            {"PAPER", new string[] {"ROCK", "WATERBOMB"}},
+            {"SCISSORS", new string[] {"PAPER", "WATERBOMB"}},
+            {"DYNAMITE", new string[] {"ROCK", "PAPER", "SCISSORS"}},
+            {"WATERBOMB", new string[] {"DYNAMITE"}}
+        };
+        private static int _dynamiteRemaining;
+
+        // my moves
+        private static string _myMove;
+        private static string _myLastMove;
 
 
         /* Method called when start instruction is received
@@ -35,6 +56,7 @@ namespace BotExample
             _pointstoWin = pointstoWin;
             _maxRounds = maxRounds;
             _dynamite = dynamite;
+            _newGame = true;
         }
 
         /* Method called when move instruction is received instructing opponents move
@@ -44,6 +66,9 @@ namespace BotExample
          */
         public static void SetLastOpponentsMove(string lastOpponentsMove)
         {
+            if (lastOpponentsMove == "DYNAMITE") {
+                _opponentDynamiteRemaining--;
+            }
             _lastOpponentsMove = lastOpponentsMove;
         }
 
@@ -55,7 +80,17 @@ namespace BotExample
          */
         internal static string GetMove()
         {
+            GetLastRoundResult();
             return "ROCK";
+
+            if (_myMove == "DYNAMITE") {
+                _dynamiteRemaining--;
+            }
+        }
+
+        internal static void GetLastRoundResult()
+        {
+
         }
     }
         
