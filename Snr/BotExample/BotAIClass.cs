@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Threading;
+using System.Security.Cryptography;
 
 
 
@@ -28,7 +29,8 @@ namespace BotExample
         private static int _dynamite;
         private static bool _newGame;
         private static string _lastRoundResult;
-        
+        private static int _gameSeed;
+
         // weapon info
         private static string[] _weapons = new string[] {"ROCK", "PAPER", "SCISSORS", "DYNAMITE", "WATERBOMB"};
         private static IDictionary<string, string[]> _winScenarios = new Dictionary<string, string[]>() {
@@ -57,10 +59,11 @@ namespace BotExample
             _maxRounds = maxRounds;
             _dynamite = dynamite;
 
-            resetGameVariables();
+            ResetGameVariables();
+            GenerateRandomSeed();
         }
 
-        internal static void resetGameVariables()
+        internal static void ResetGameVariables()
         {
             _newGame = true;
             _lastRoundResult = null;
@@ -69,6 +72,15 @@ namespace BotExample
             _lastOpponentsMove = null;
             _dynamiteRemaining = _dynamite;
             _opponentDynamiteRemaining = _dynamite;
+        }
+
+        internal static void GenerateRandomSeed() {
+			using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+			{
+				byte[] randomNumber = new byte[4];
+				rng.GetBytes(randomNumber);
+				_gameSeed = BitConverter.ToInt32(randomNumber, 0);
+			}
         }
 
         /* Method called when move instruction is received instructing opponents move
@@ -109,12 +121,11 @@ namespace BotExample
                 _lastRoundResult = "WIN";
             }
             else if (_myLastMove == _lastOpponentsMove) {
-                _lastRoundResult == "TIE";
+                _lastRoundResult = "TIE";
             }
             else {
-                _lastRoundResult = "LOSE"
+                _lastRoundResult = "LOSE";
             }
         }
-    }
-        
+    }        
 }
