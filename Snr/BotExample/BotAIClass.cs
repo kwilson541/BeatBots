@@ -30,7 +30,7 @@ namespace BotExample
         private static string _lastRoundResult;
         
         // weapon info
-        private static string[] _weapons = {"ROCK", "PAPER", "SCISSORS", "DYNAMITE", "WATERBOMB"};
+        private static string[] _weapons = new string[] {"ROCK", "PAPER", "SCISSORS", "DYNAMITE", "WATERBOMB"};
         private static IDictionary<string, string[]> _winScenarios = new Dictionary<string, string[]>() {
             {"ROCK", new string[] {"SCISSORS", "WATERBOMB"}},
             {"PAPER", new string[] {"ROCK", "WATERBOMB"}},
@@ -56,7 +56,20 @@ namespace BotExample
             _pointstoWin = pointstoWin;
             _maxRounds = maxRounds;
             _dynamite = dynamite;
+            
+            resetGameVariables();
+        }
+
+        internal static void resetGameVariables()
+        {
             _newGame = true;
+            _lastRoundResult = null;
+            _myMove = null;
+            _myLastMove = null;
+            _lastOpponentsMove = null;
+            _dynamiteRemaining = _dynamite;
+            _opponentDynamiteRemaining = _dynamite;
+
         }
 
         /* Method called when move instruction is received instructing opponents move
