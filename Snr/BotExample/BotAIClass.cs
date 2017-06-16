@@ -110,6 +110,8 @@ namespace BotExample
                 GetLastRoundResult();
             }
 
+            AddLastRoundToLog();
+
             if (_myMove == "DYNAMITE") {
                 _dynamiteRemaining--;
             }
@@ -117,6 +119,24 @@ namespace BotExample
             _myMove = "ROCK";
 
             return _myMove;
+        }
+
+        private static void AddLastRoundToLog()
+        {
+            string path = @"C:\dev\BeatBots.Log\{_opponentName}.txt";
+            string newLine = "Me: {_myLastMove}, {_opponentName}: {_lastOpponentsMove}, Result: {_lastRoundResult}";
+
+            if (!File.Exists(path)) {
+                File.Create(path);
+            }
+
+            TextWriter textWriter = new StreamWriter(path);
+
+            if (_newGame) {
+                textWriter.WriteLine("----------NEW GAME----------");
+            }
+            textWriter.WriteLine(newLine);
+            textWriter.Close();
         }
 
         private static void SetMyLastMove()
