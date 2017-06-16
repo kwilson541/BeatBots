@@ -33,7 +33,7 @@ namespace BotExample
 
         // weapon info
         private static string[] _weapons = new string[] {"ROCK", "PAPER", "SCISSORS", "DYNAMITE", "WATERBOMB"};
-        private static IDictionary<string, string[]> _winScenarios = new Dictionary<string, string[]>() {
+        private static readonly IDictionary<string, string[]> _winScenarios = new Dictionary<string, string[]>() {
             {"ROCK", new string[] {"SCISSORS", "WATERBOMB"}},
             {"PAPER", new string[] {"ROCK", "WATERBOMB"}},
             {"SCISSORS", new string[] {"PAPER", "WATERBOMB"}},
@@ -63,7 +63,7 @@ namespace BotExample
             GenerateRandomSeed();
         }
 
-        internal static void ResetGameVariables()
+        private static void ResetGameVariables()
         {
             _newGame = true;
             _lastRoundResult = null;
@@ -74,7 +74,7 @@ namespace BotExample
             _opponentDynamiteRemaining = _dynamite;
         }
 
-        internal static void GenerateRandomSeed() {
+        private static void GenerateRandomSeed() {
 			using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
 			{
 				byte[] randomNumber = new byte[4];
@@ -104,7 +104,9 @@ namespace BotExample
          */
         internal static string GetMove()
         {
-            if (_newGame != true) {                
+            if (_newGame != true)
+            {
+                SetMyLastMove();                
                 GetLastRoundResult();
             }
 
@@ -112,10 +114,17 @@ namespace BotExample
                 _dynamiteRemaining--;
             }
 
+            _myMove = "ROCK";
+
             return _myMove;
         }
 
-        internal static void GetLastRoundResult()
+        private static void SetMyLastMove()
+        {
+            _myLastMove = _myMove;
+        }
+
+        private static void GetLastRoundResult()
         {
             if (_winScenarios[_myLastMove].Contains(_lastOpponentsMove)) {
                 _lastRoundResult = "WIN";
