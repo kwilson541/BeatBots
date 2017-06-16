@@ -108,9 +108,8 @@ namespace BotExample
             {
                 SetMyLastMove();                
                 GetLastRoundResult();
+                AddLastRoundToLog();
             }
-
-            AddLastRoundToLog();
 
             if (_myMove == "DYNAMITE") {
                 _dynamiteRemaining--;
@@ -123,8 +122,8 @@ namespace BotExample
 
         private static void AddLastRoundToLog()
         {
-            string path = @"C:\dev\BeatBots.Log\{_opponentName}.txt";
-            string newLine = "Me: {_myLastMove}, {_opponentName}: {_lastOpponentsMove}, Result: {_lastRoundResult}";
+            string path = $@"C:\dev\BeatBots.Log\{_opponentName}.txt";
+            string newLine = $"Me: {_myLastMove}, {_opponentName}: {_lastOpponentsMove}, Result: {_lastRoundResult}";
 
             if (!File.Exists(path)) {
                 File.Create(path);
