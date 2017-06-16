@@ -54,17 +54,22 @@ namespace BotExample
          */
         internal static void SetStartValues(string opponentName, int pointstoWin, int maxRounds, int dynamite)
         {
-            _opponentName = opponentName;
+            _dynamite = dynamite;
             _pointstoWin = pointstoWin;
             _maxRounds = maxRounds;
-            _dynamite = dynamite;
 
             ResetGameVariables();
             GenerateRandomSeed();
+
+            _opponentName = opponentName;
         }
 
         private static void ResetGameVariables()
         {
+            if (_opponentName != null) {
+                AddLastRoundToLog();
+            }
+
             _newGame = true;
             _lastRoundResult = null;
             _myMove = null;
