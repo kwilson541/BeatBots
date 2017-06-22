@@ -1,2 +1,8 @@
 C:\Users\littleds\Documents\Visual Studio 2013\Projects\BotExample\BotExample\bin\Debug\BotExample.exe.config
 C:\Users\coughb\Downloads\BotExample\Snr\BotExample\bin\Debug\BotExample.exe.config
+C:\dev\BeatBots\Snr\BotExample\bin\Debug\BotExample.exe.config
+C:\dev\BeatBots\Snr\BotExample\bin\Debug\BotExample.exe
+C:\dev\BeatBots\Snr\BotExample\bin\Debug\BotExample.pdb
+C:\dev\BeatBots\Snr\BotExample\obj\Debug\BotExample.csprojResolveAssemblyReference.cache
+C:\dev\BeatBots\Snr\BotExample\obj\Debug\BotExample.exe
+C:\dev\BeatBots\Snr\BotExample\obj\Debug\BotExample.pdb

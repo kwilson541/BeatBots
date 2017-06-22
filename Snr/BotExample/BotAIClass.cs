@@ -29,7 +29,6 @@ namespace BotExample
         private static int _dynamite;
         private static bool _newGame;
         private static string _lastRoundResult;
-        private static int _gameSeed;
 
         // weapon info
         private static string[] _weapons = new string[] {"ROCK", "PAPER", "SCISSORS", "DYNAMITE", "WATERBOMB"};
@@ -59,7 +58,6 @@ namespace BotExample
             _maxRounds = maxRounds;
 
             ResetGameVariables();
-            GenerateRandomSeed();
 
             _opponentName = opponentName;
         }
@@ -79,15 +77,6 @@ namespace BotExample
             _opponentDynamiteRemaining = _dynamite;
         }
 
-        private static void GenerateRandomSeed() {
-			using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-			{
-				byte[] randomNumber = new byte[4];
-				rng.GetBytes(randomNumber);
-				_gameSeed = BitConverter.ToInt32(randomNumber, 0);
-			}
-        }
-
         /* Method called when move instruction is received instructing opponents move
          *
          * POST http://<your_bot_url>/move
@@ -99,6 +88,10 @@ namespace BotExample
                 _opponentDynamiteRemaining--;
             }
             _lastOpponentsMove = lastOpponentsMove;
+
+            SetMyLastMove();
+            GetLastRoundResult();
+            AddLastRoundToLog();
         }
 
 
@@ -109,20 +102,29 @@ namespace BotExample
          */
         internal static string GetMove()
         {
-            if (_newGame != true)
+            if (_newGame)
             {
-                SetMyLastMove();                
-                GetLastRoundResult();
-                AddLastRoundToLog();
+                StartNewGameInLog();
+                _newGame = false;
             }
+
+            SetRandomMove();
 
             if (_myMove == "DYNAMITE") {
                 _dynamiteRemaining--;
             }
 
-            _myMove = "ROCK";
-
             return _myMove;
+        }
+
+        private static void StartNewGameInLog()
+        {
+            string path = $@"C:\dev\BeatBots.Log\{_opponentName}.txt";
+
+            TextWriter textWriter = new StreamWriter(path, true);
+
+            textWriter.WriteLine("----------NEW GAME----------");
+            textWriter.Close();    
         }
 
         private static void AddLastRoundToLog()
@@ -130,15 +132,8 @@ namespace BotExample
             string path = $@"C:\dev\BeatBots.Log\{_opponentName}.txt";
             string newLine = $"Me: {_myLastMove}, {_opponentName}: {_lastOpponentsMove}, Result: {_lastRoundResult}";
 
-            if (!File.Exists(path)) {
-                File.Create(path);
-            }
+            TextWriter textWriter = new StreamWriter(path, true);
 
-            TextWriter textWriter = new StreamWriter(path);
-
-            if (_newGame) {
-                textWriter.WriteLine("----------NEW GAME----------");
-            }
             textWriter.WriteLine(newLine);
             textWriter.Close();
         }
@@ -159,6 +154,22 @@ namespace BotExample
             else {
                 _lastRoundResult = "LOSE";
             }
+        }
+
+        private static void SetRandomMove()
+        {
+            int randomSeed;
+
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                byte[] randomNumber = new byte[4];
+                rng.GetBytes(randomNumber);
+                randomSeed = BitConverter.ToInt32(randomNumber, 0);
+            }
+
+            Random random = new Random(randomSeed);
+
+            _myMove = _weapons[random.Next(0,4)];
         }
     }        
 }
